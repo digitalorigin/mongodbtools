@@ -1,6 +1,9 @@
+# roxygen2::roxygenise()
+
 library('rJava')
 .jinit()
-.jaddClassPath("inst/java/r-mongo-scala-1.0-SNAPSHOT.jar")
+.jaddClassPath("inst/java/mongo-java-driver-3.2.2.jar")
+.jaddClassPath("inst/java/rmongo.jar")
 
 setClass("RMongo", representation(javaMongo = "jobjRef"))
 

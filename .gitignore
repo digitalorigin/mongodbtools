@@ -6,3 +6,4 @@ src/r-mongo-scala/target
 *.iml
 *.class
 .idea
+.Rproj.user

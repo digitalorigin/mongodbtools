@@ -1,3 +1,5 @@
 src
 .git
 .idea
+^.*\.Rproj$
+^\.Rproj\.user$
