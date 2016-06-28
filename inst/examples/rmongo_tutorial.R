@@ -17,3 +17,11 @@ mdb.useDatabase(con, "audit_prod")
 mdb.showCollections(con)
 
 mdb.close(con)
+
+
+library(data.table)
+
+readLines("C:/workspace/prova.csv", n=2)
+
+df = fread("C:/workspace/prova.csv")
+df
