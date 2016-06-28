@@ -7,3 +7,4 @@ src/r-mongo-scala/target
 *.class
 .idea
 .Rproj.user
+RMongo.Rproj
