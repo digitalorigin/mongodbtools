@@ -1,10 +1,5 @@
 # roxygen2::roxygenise()
 
-library('rJava')
-.jinit()
-.jaddClassPath("inst/java/mongo-java-driver-3.2.2.jar")
-.jaddClassPath("inst/java/rmongo.jar")
-
 multiplelines.message <- function (strText) {
   #   writeLines(strwrap(strText, width=73))
   #   strText = unlist(strsplit(strText, "\r\n"))
@@ -41,11 +36,11 @@ mdb.showCollections <- function(rmongo) {
 
 #' @title mdb.find
 #' @export
-mdb.find <- function(rmongo, strQuery, strFile) {
+mdb.find <- function(rmongo, strCollection, strQuery, strFile) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Find \n"))
+  multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
   multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
-  results <- .jcall(rmongo, "[S", "find", strQuery, strFile)
+  results <- .jcall(rmongo, "V", "find", strCollection, strQuery, strFile)
   
   # if (results == "") {
   #   return(data.frame())
@@ -56,6 +51,17 @@ mdb.find <- function(rmongo, strQuery, strFile) {
   #   
   #   return(data.frame.results)
   # }
+  invisible(NULL)
+}
+
+#' @title mdb.find
+#' @export
+mdb.findVars <- function(rmongo, strCollection, strQuery, listVars, strFile) {
+  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
+  multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
+  results <- .jcall(rmongo, "V", "findVars", strCollection, strQuery, listVars, strFile)
+  
   invisible(NULL)
 }
 

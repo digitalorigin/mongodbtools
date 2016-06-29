@@ -157,7 +157,7 @@ public class RMongo {
 			List<List<String>> listVarPath = new ArrayList<List<String>>();
 			for (int i=0;i<listVars.length;i++) {
 				String[] temp;
-				temp = listVars[i].split(";");
+				temp = listVars[i].split("\\.");
 				listVarPath.add(Arrays.asList(temp)); 
 			}
 			
@@ -173,8 +173,6 @@ public class RMongo {
 //		    while (cursor.hasNext() && (row < maxRows || maxRows <0)) {
 		    	Document el = b.next();
 //		    	DBObject el = cursor.next();
-		    	
-		    	Set<String> setKeys = el.keySet();
 		    	
 		    	if (firstRow) {
 		    		firstColumn = true;
@@ -198,11 +196,17 @@ public class RMongo {
 	    		strLine = "";
 				for (int i=0;i<listVars.length;i++) {
 					String val = "";
+					Object obj = null;
 					List<String> listPath = listVarPath.get(i);
 					for (int rec=0;rec<listPath.size();rec++) {
 						String key = listPath.get(rec);
-						Object o = el.get(key);
+						if (rec==0) {
+							if (el != null) obj = getByKey(el, key);
+						} else {
+							if (obj != null) obj = getByKey(obj, key);
+						}
 					}
+					if (obj != null) val = getText(obj);
 					if (firstColumn) {
 		    			strLine = strLine + val;
 		    			firstColumn = false;
@@ -234,5 +238,56 @@ public class RMongo {
 
 	public void setMaxRows(int maxRows) {
 		this.maxRows = maxRows;
+	}
+	
+	private String getText(Object o) {
+		if (o == null) {
+			return (null);
+		} else if (o instanceof org.bson.types.ObjectId) {
+			org.bson.types.ObjectId obj = (org.bson.types.ObjectId) o;
+			return obj.toString();
+		} else if (o instanceof com.mongodb.BasicDBObject) {
+			com.mongodb.BasicDBObject obj = (com.mongodb.BasicDBObject) o;
+			return obj.toJson();
+		} else if (o instanceof org.bson.Document) {
+			org.bson.Document obj = (org.bson.Document) o;
+			return obj.toJson();
+		} else if (o instanceof java.lang.Double) {
+			java.lang.Double obj = (java.lang.Double) o;
+			return obj.toString();
+		} else if (o instanceof java.lang.Integer) {
+			java.lang.Integer obj = (java.lang.Integer) o;
+			return obj.toString();
+		} else if (o instanceof java.lang.String) {
+			java.lang.String obj = (java.lang.String) o;
+			return obj;			
+		} else if (o instanceof java.lang.Float) {
+			java.lang.Float obj = (java.lang.Float) o;
+			return obj.toString();
+		} else if (o instanceof java.lang.Long) {
+			java.lang.Long obj = (java.lang.Long) o;
+			return obj.toString();			
+		} else {
+			System.out.println("Class not recognized: "+o.getClass().getName());
+			return (o.toString());
+		}
+	}
+	
+	private Object getByKey(Object o, String key) {
+		if (o == null) {
+			return (null);
+		} else if (o instanceof org.bson.types.ObjectId) {
+			org.bson.types.ObjectId obj = (org.bson.types.ObjectId) o;
+			return obj;
+		} else if (o instanceof com.mongodb.BasicDBObject) {
+			com.mongodb.BasicDBObject obj = (com.mongodb.BasicDBObject) o;
+			return obj.get(key);
+		} else if (o instanceof org.bson.Document) {
+			org.bson.Document obj = (org.bson.Document) o;
+			return obj.get(key);
+		} else {
+			System.out.println("Class not recognized: "+o.getClass().getName());
+			return (o);
+		}
 	}
 }

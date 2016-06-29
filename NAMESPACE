@@ -3,5 +3,6 @@
 export(mdb.close)
 export(mdb.connect)
 export(mdb.find)
+export(mdb.findVars)
 export(mdb.showCollections)
 export(mdb.useDatabase)
