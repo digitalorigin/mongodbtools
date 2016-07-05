@@ -1,4 +1,4 @@
-Package: RMongo
+Package: mongodbtools
 Type: Package
 Title: MongoDB Client for R
 Version: 1.0.0
@@ -8,7 +8,7 @@ Maintainer: Roc Alabern <roc.alabern@gmail.com>
 Description: MongoDB Database interface for R. The interface is provided via
     Java calls to the mongo-java-driver. We modified Chheng version in order to fit
     our requirements. Actually we are not using any of the original code, but it
-    inspired us to develop this.
+    inspired us to develop this. Since the code it is so different we renamed it to mongodbtools.
 License: GPL-3
 Depends:
     R(>= 2.14.1),

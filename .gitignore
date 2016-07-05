@@ -8,3 +8,4 @@ src/r-mongo-scala/target
 .idea
 .Rproj.user
 RMongo.Rproj
+mongodbtools.Rproj
