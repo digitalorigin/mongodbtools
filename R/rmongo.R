@@ -60,7 +60,7 @@ mdb.findVars <- function(rmongo, strCollection, strQuery, listVars, strFile) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
   multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
-  results <- .jcall(rmongo, "V", "findVars", strCollection, strQuery, listVars, strFile)
+  results <- .jcall(rmongo, "V", "findVars", strCollection, strQuery, as.vector(listVars), strFile)
   
   invisible(NULL)
 }

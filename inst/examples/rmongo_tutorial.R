@@ -1,5 +1,6 @@
-library(RMongo)
-source("C:/Alabern/Data/ConnData/init_conndata.R")
+digorig::do.init()
+library(mongodbtools)
+library(data.table)
 
 strURI = paste0(
   "mongodb://",
@@ -13,21 +14,17 @@ mdb.useDatabase(con, "audit_prod")
 
 mdb.showCollections(con)
 
-strFind = "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-06-26T00:00:00.000Z\"} }, \"contexts.ONLINE_BANKING\":{\"$exists\":true}}"
+strFind = "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-07-10T00:00:00.000Z\"} }, \"contexts.ONLINE_BANKING\":{\"$exists\":true}}"
 listvars = c(
   "_id",
-  "contexts",
   "contexts.ONLINE_BANKING.OnlineBankingRules.account.sumAmountRule.amount")
-strFile = "C:/workspace/prova.csv"
+strFile = "C:/workspace/prova2.csv"
 
 mdb.findVars(con, "flex_eval", strFind, listvars, strFile)
 
 mdb.close(con)
 
+readLines(strFile, n=2)
 
-library(data.table)
-
-readLines("C:/workspace/prova.csv", n=2)
-
-df = fread("C:/workspace/prova.csv")
+df = fread(strFile)
 df

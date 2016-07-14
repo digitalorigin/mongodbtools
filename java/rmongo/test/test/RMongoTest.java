@@ -7,9 +7,9 @@ import rmongo.RMongo;
 
 public class RMongoTest {
 	static String user = "******";
-	static String pass = "*****";
+	static String pass = "******";
 	static String ip = "******";
-	static String port = "******";
+	static String port = "****";
 	
 	public static void main(String[] args) {
 		RMongo rmongo = new RMongo("mongodb://"+user+":"+pass+"@"+ip+":"+port+"/?authSource=audit_prod");
@@ -34,7 +34,7 @@ public class RMongoTest {
 	         String[] listVars = listAVars.toArray(new String[0]);
 	         rmongo.findVars(
 	        		 "flex_eval", 
-	        		 "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-06-26T00:00:00.000Z\"} }, \"contexts.ONLINE_BANKING\":{\"$exists\":true}}", 
+	        		 "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-07-10T00:00:00.000Z\"} }, \"contexts.ONLINE_BANKING\":{\"$exists\":true}}", 
 	        		 listVars, 
 	        		 strFile);
 	         
