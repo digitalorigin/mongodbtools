@@ -3,16 +3,16 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
-import rmongo.RMongo;
+import rmongodbtools.RMongoDB;
 
-public class RMongoTest {
+public class RMongoDBTest {
 	static String user = "******";
 	static String pass = "******";
 	static String ip = "******";
-	static String port = "****";
+	static String port = "******";
 	
 	public static void main(String[] args) {
-		RMongo rmongo = new RMongo("mongodb://"+user+":"+pass+"@"+ip+":"+port+"/?authSource=audit_prod");
+		RMongoDB rmongo = new RMongoDB("mongodb://"+user+":"+pass+"@"+ip+":"+port+"/?authSource=audit_prod");
 		try {
 			rmongo.connectDatabase("audit_prod");
 			
@@ -24,10 +24,7 @@ public class RMongoTest {
 	         
 	         rmongo.setMaxRows(10);
 	         
-//	         String strFile = "C:/workspace/prova2.csv";
-//	         rmongo.find("flex_eval", "{'contexts.ONLINE_BANKING':{'$exists':true}}", strFile);
-	         
-	         String strFile = "C:/workspace/prova3.csv";
+	         String strFile = "C:/workspace/prova_java.csv";
 	         List<String> listAVars = new ArrayList<String>();
 	         listAVars.add("_id");
 	         listAVars.add("contexts.ONLINE_BANKING.OnlineBankingRules.account.sumAmountRule.amount");

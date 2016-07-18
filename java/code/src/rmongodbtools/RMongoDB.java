@@ -1,4 +1,4 @@
-package rmongo;
+package rmongodbtools;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,7 +25,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.util.JSON;
 
-public class RMongo {
+public class RMongoDB {
 	
 	int maxRows = 100;
 
@@ -33,8 +33,9 @@ public class RMongo {
 	MongoDatabase database = null;
 //	DB db = null;
 	
-	public RMongo(String strURI) {
+	public RMongoDB(String strURI) {
 		try {
+			System.out.println("Creating RMongoDB java object...");
 			MongoClientOptions.Builder options = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
 			SSLContext context;
 			context = SSLContext.getInstance("SSL");

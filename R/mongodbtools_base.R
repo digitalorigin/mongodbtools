@@ -12,35 +12,35 @@ multiplelines.message <- function (strText) {
 mdb.connect <- function(strURI) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Connect \n"))
-  rmongo <- .jnew("rmongo/RMongo", strURI)
-  rmongo
+  rmongodb <- .jnew("rmongodbtools/RMongoDB", strURI)
+  rmongodb
 }
 
 #' @title mdb.useDatabase
 #' @export
-mdb.useDatabase <- function(rmongo, strDatabase) {
+mdb.useDatabase <- function(rmongodb, strDatabase) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n USE ",strDatabase," \n"))
-  results <- .jcall(rmongo, "V", "connectDatabase", strDatabase)
+  results <- .jcall(rmongodb, "V", "connectDatabase", strDatabase)
   results
 }
 
 #' @title mdb.showCollections
 #' @export
-mdb.showCollections <- function(rmongo) {
+mdb.showCollections <- function(rmongodb) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Show Collections \n"))
-  results <- .jcall(rmongo, "[S", "showCollections")
+  results <- .jcall(rmongodb, "[S", "showCollections")
   results
 }
 
 #' @title mdb.find
 #' @export
-mdb.find <- function(rmongo, strCollection, strQuery, strFile) {
+mdb.find <- function(rmongodb, strCollection, strQuery, strFile) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
   multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
-  results <- .jcall(rmongo, "V", "find", strCollection, strQuery, strFile)
+  results <- .jcall(rmongodb, "V", "find", strCollection, strQuery, strFile)
   
   # if (results == "") {
   #   return(data.frame())
@@ -56,19 +56,19 @@ mdb.find <- function(rmongo, strCollection, strQuery, strFile) {
 
 #' @title mdb.find
 #' @export
-mdb.findVars <- function(rmongo, strCollection, strQuery, listVars, strFile) {
+mdb.findVars <- function(rmongodb, strCollection, strQuery, listVars, strFile) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
   multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
-  results <- .jcall(rmongo, "V", "findVars", strCollection, strQuery, as.vector(listVars), strFile)
+  results <- .jcall(rmongodb, "V", "findVars", strCollection, strQuery, as.vector(listVars), strFile)
   
   invisible(NULL)
 }
 
 #' @title mdb.close
 #' @export
-mdb.close <- function(rmongo) {
+mdb.close <- function(rmongodb) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
-  .jcall(rmongo, "V", "close")
+  .jcall(rmongodb, "V", "close")
 }

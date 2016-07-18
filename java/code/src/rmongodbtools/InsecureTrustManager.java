@@ -1,4 +1,4 @@
-package rmongo;
+package rmongodbtools;
 
 /**
  * Created by sguisado on 21/06/16.
