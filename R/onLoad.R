@@ -1,4 +1,11 @@
 #' @import rJava
 .onLoad <- function(libname, pkgname) {
-  .jpackage(pkgname, lib.loc = libname)
+  tryCatch({
+    .jpackage(pkgname, lib.loc = libname)
+  }, 
+  error = function(e) {
+    warning("Error onLoad")
+    print(e)
+  }
+  )
 }
