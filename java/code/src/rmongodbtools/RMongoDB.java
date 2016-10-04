@@ -30,7 +30,7 @@ public class RMongoDB {
 	
 	int maxRows = -1;
 
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	MongoClient mongoClient = null;
 	MongoDatabase database = null;
