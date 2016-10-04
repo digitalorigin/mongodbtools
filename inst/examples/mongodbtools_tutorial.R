@@ -10,6 +10,10 @@ strURI = paste0(
 
 con <- mdb.connect(strURI)
 
+mdb.getMaxRows(con)
+mdb.setMaxRows(con, 1000)
+mdb.getMaxRows(con)
+
 mdb.useDatabase(con, "audit_prod")
 
 mdb.showCollections(con)

@@ -27,11 +27,30 @@ import com.mongodb.util.JSON;
 
 public class RMongoDB {
 	
-	int maxRows = 100;
+	int maxRows = -1;
 
 	MongoClient mongoClient = null;
 	MongoDatabase database = null;
 //	DB db = null;
+	
+	public RMongoDB(String strURI, int maxRows) {
+		try {
+			System.out.println("Creating RMongoDB java object...");
+			MongoClientOptions.Builder options = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
+			SSLContext context;
+			context = SSLContext.getInstance("SSL");
+					TrustManager[] trustAllCerts = { new InsecureTrustManager() };	
+			context.init(null, trustAllCerts, new java.security.SecureRandom());
+			options.socketFactory((SSLSocketFactory) context.getSocketFactory());
+			MongoClientURI uri = new MongoClientURI(strURI, options);
+			
+			this.mongoClient = new MongoClient(uri);
+			this.maxRows = maxRows;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public RMongoDB(String strURI) {
 		try {
@@ -44,7 +63,7 @@ public class RMongoDB {
 			options.socketFactory((SSLSocketFactory) context.getSocketFactory());
 			MongoClientURI uri = new MongoClientURI(strURI, options);
 			
-			mongoClient = new MongoClient(uri);
+			this.mongoClient = new MongoClient(uri);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

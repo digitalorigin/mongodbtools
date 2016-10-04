@@ -81,6 +81,20 @@ mdb.findVars <- function(rmongodb, strCollection, strQuery, listVars, strFile, s
   invisible(NULL)
 }
 
+#' @title mdb.getMaxRows
+#' @export
+mdb.getMaxRows <- function(rmongodb) {
+  maxRows <- .jcall(rmongodb, "I", "getMaxRows")
+  return(maxRows)
+}
+
+#' @title mdb.setMaxRows
+#' @export
+mdb.setMaxRows <- function(rmongodb, maxRows=-1) {
+  .jcall(rmongodb, "V", "setMaxRows", as.integer(maxRows))
+  invisible(NULL)
+}
+
 #' @title mdb.close
 #' @export
 mdb.close <- function(rmongodb) {
