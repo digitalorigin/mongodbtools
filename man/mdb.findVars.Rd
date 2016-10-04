@@ -4,6 +4,7 @@
 \alias{mdb.findVars}
 \title{mdb.find}
 \usage{
-mdb.findVars(rmongodb, strCollection, strQuery, listVars, strFile)
+mdb.findVars(rmongodb, strCollection, strQuery, listVars, strFile,
+  strDatabase = NULL)
 }
 

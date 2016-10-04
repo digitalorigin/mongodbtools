@@ -1,8 +1,5 @@
 package rmongodbtools;
 
-/**
- * Created by sguisado on 21/06/16.
- */
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.X509TrustManager;

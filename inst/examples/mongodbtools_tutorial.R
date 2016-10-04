@@ -1,4 +1,3 @@
-# source("C:/Alabern/Data/ConnData/init_conndata.R")
 digorig::do.init()
 library(mongodbtools)
 library(data.table)
@@ -19,7 +18,7 @@ strFind = "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-07-10T00:00:00.00
 listvars = c(
   "_id",
   "contexts.ONLINE_BANKING.OnlineBankingRules.account.sumAmountRule.amount")
-strFile = "C:/workspace/prova_rmongodb.csv"
+strFile = "C:/workspace/prova_mongodbtools.csv"
 
 mdb.findVars(con, "flex_eval", strFind, listvars, strFile)
 

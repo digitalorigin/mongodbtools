@@ -4,6 +4,6 @@
 \alias{mdb.find}
 \title{mdb.find}
 \usage{
-mdb.find(rmongodb, strCollection, strQuery, strFile)
+mdb.find(rmongodb, strCollection, strQuery, strFile, strDatabase = NULL)
 }
 
