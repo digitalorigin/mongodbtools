@@ -30,7 +30,8 @@ public class RMongoDB {
 	
 	int maxRows = -1;
 
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	String strDateFormat = "yyyy-MM-dd HH:mm:ss";
+	SimpleDateFormat dateFormat = new SimpleDateFormat(strDateFormat);
 	
 	MongoClient mongoClient = null;
 	MongoDatabase database = null;
@@ -263,6 +264,15 @@ public class RMongoDB {
 		this.maxRows = maxRows;
 	}
 	
+	public String getDateFormat() {
+		return strDateFormat;
+	}
+
+	public void setDateFormat(String strDateFormat) {
+		this.strDateFormat = strDateFormat;
+		this.dateFormat = new SimpleDateFormat(strDateFormat);
+	}
+	
 	private String getText(Object o) {
 		if (o == null) {
 			return (null);
@@ -295,8 +305,7 @@ public class RMongoDB {
 			return obj.toString();				
 		} else if (o instanceof java.util.Date) {
 			java.util.Date obj = (java.util.Date) o;
-//			return obj.toString();
-			return dateFormat.format(obj);
+			return this.dateFormat.format(obj);
 		} else {
 			System.out.println("Class not recognized (getText): "+o.getClass().getName());
 			return (o.toString());

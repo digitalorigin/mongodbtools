@@ -95,6 +95,22 @@ mdb.setMaxRows <- function(rmongodb, maxRows=-1) {
   invisible(NULL)
 }
 
+
+#' @title mdb.getDateFormat
+#' @export
+mdb.getDateFormat <- function(rmongodb) {
+  strDateFormat <- .jcall(rmongodb, "S", "getDateFormat")
+  return(strDateFormat)
+}
+
+#' @title mdb.setDateFormat
+#' @export
+mdb.setDateFormat <- function(rmongodb, strDateFormat="yyyy-MM-dd HH:mm:ss") {
+  # strDateFormat="yyyy-mm-dd HH:mm:ss.SSSSSS"
+  .jcall(rmongodb, "V", "setDateFormat", strDateFormat)
+  invisible(NULL)
+}
+
 #' @title mdb.close
 #' @export
 mdb.close <- function(rmongodb) {
