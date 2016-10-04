@@ -3,6 +3,7 @@ package rmongodbtools;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,8 @@ public class RMongoDB {
 	
 	int maxRows = -1;
 
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+	
 	MongoClient mongoClient = null;
 	MongoDatabase database = null;
 //	DB db = null;
@@ -292,7 +295,8 @@ public class RMongoDB {
 			return obj.toString();				
 		} else if (o instanceof java.util.Date) {
 			java.util.Date obj = (java.util.Date) o;
-			return obj.toString();	
+//			return obj.toString();
+			return dateFormat.format(obj);
 		} else {
 			System.out.println("Class not recognized (getText): "+o.getClass().getName());
 			return (o.toString());
