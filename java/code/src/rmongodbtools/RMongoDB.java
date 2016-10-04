@@ -287,8 +287,14 @@ public class RMongoDB {
 		} else if (o instanceof java.lang.Long) {
 			java.lang.Long obj = (java.lang.Long) o;
 			return obj.toString();			
+		} else if (o instanceof java.lang.Boolean) {
+			java.lang.Boolean obj = (java.lang.Boolean) o;
+			return obj.toString();				
+		} else if (o instanceof java.util.Date) {
+			java.util.Date obj = (java.util.Date) o;
+			return obj.toString();	
 		} else {
-			System.out.println("Class not recognized: "+o.getClass().getName());
+			System.out.println("Class not recognized (getText): "+o.getClass().getName());
 			return (o.toString());
 		}
 	}
@@ -306,7 +312,7 @@ public class RMongoDB {
 			org.bson.Document obj = (org.bson.Document) o;
 			return obj.get(key);
 		} else {
-			System.out.println("Class not recognized: "+o.getClass().getName());
+			System.out.println("Class not recognized (getByKey): "+o.getClass().getName());
 			return (o);
 		}
 	}
