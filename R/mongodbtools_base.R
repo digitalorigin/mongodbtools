@@ -56,7 +56,7 @@ mdb.showCollections <- function(rmongodb) {
 #' @title mdb.find
 #' @export
 mdb.find <- function(rmongodb, strCollection, strQuery, strFile, strDatabase = NULL) {
-  if (!is.null(strDatabase)) mdb.useDatabase(con, strDatabase)
+  if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
   multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
@@ -70,7 +70,7 @@ mdb.find <- function(rmongodb, strCollection, strQuery, strFile, strDatabase = N
 #' @title mdb.find
 #' @export
 mdb.findVars <- function(rmongodb, strCollection, strQuery, listVars, strFile, strDatabase = NULL) {
-  if (!is.null(strDatabase)) mdb.useDatabase(con, strDatabase)
+  if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
   multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
