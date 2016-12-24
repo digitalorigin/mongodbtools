@@ -95,7 +95,7 @@ public class RMongoDB {
 		return output;
 	}
 	
-	public void find(String collectionName, String query, String strFile) {
+	public void findVarsJSON(String collectionName, String query, String strFile) {
 		try {
 			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
 			
@@ -145,17 +145,21 @@ public class RMongoDB {
 	    		strLine = "";
 	    		for (String key : setKeys) {
 	    			Object o = el.get(key);
+	    			
+//	    			String strValue = o.toString();
+	    			String strValue = String.format("%s",JSON.serialize(o));
+	    			
 		    		if (firstColumn) {
-		    			strLine = strLine + o;
+		    			strLine = strLine + strValue;
 		    			firstColumn = false;
 		    		} else {
-		    			strLine = strLine + ";" + o;
+		    			strLine = strLine + ";" + strValue;
 		    		}
 		    	}
 				bufferedWriterOutput.write(strLine);
 				bufferedWriterOutput.newLine();
 				
-				row =row + 1;
+				row = row + 1;
 		    }
 		    bufferedWriterOutput.close();
 		} catch (Exception e) {
@@ -241,13 +245,89 @@ public class RMongoDB {
 				bufferedWriterOutput.write(strLine);
 				bufferedWriterOutput.newLine();
 				
-				row =row + 1;
+				row = row + 1;
 		    }
 		    bufferedWriterOutput.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public void findJSON(String collectionName, String query, String strFile) {
+		try {
+			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
+			
+			Bson bson = ( Bson ) JSON.parse( query );
+			
+			FindIterable<Document> iterable = dbCollection.find(bson);
+			MongoCursor<Document> b = iterable.iterator();
+			
+//			DBCollection dbCollection = db.getCollection(collectionName);
+//			
+//			DBObject queryObject = (DBObject) JSON.parse(query);
+//			DBObject keysObject = (DBObject) JSON.parse(keys);
+//			DBCursor cursor = dbCollection.find(queryObject, keysObject);
+			
+			System.out.println("Exporting to file : "+strFile);
+			File fileOutput = new File(strFile);	
+		    BufferedWriter bufferedWriterOutput = new BufferedWriter(new FileWriter(fileOutput, false));
+
+		    int row = 1;
+		    while (b.hasNext() && (row < maxRows || maxRows <0)) {
+//		    while (cursor.hasNext() && (row < maxRows || maxRows <0)) {
+		    	Document el = b.next();
+//		    	DBObject el = cursor.next();
+		    	
+		    	String strLine = String.format("%s",JSON.serialize(el));
+		    	
+				bufferedWriterOutput.write(strLine);
+				bufferedWriterOutput.newLine();
+				
+				row = row + 1;
+		    }
+		    bufferedWriterOutput.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public MongoCursor<Document> find(String collectionName, String query) {
+		try {
+			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
+			Bson bson = ( Bson ) JSON.parse( query );
+			FindIterable<Document> iterable = dbCollection.find(bson);
+			MongoCursor<Document> b = iterable.iterator();
+			return b;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public boolean hasNext(MongoCursor<Document> b) {
+		try {
+			return b.hasNext();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public String next(MongoCursor<Document> b) {
+		try {
+			String strLine = null;
+		    if (b.hasNext()) {
+		    	Document el = b.next();
+		    	
+		    	strLine = String.format("%s",JSON.serialize(el));
+		    	
+		    }
+		    return strLine;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
 	
 	public void close() {
 		if (mongoClient != null) mongoClient.close();

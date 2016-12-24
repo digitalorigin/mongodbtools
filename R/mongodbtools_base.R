@@ -32,6 +32,12 @@ mdb.connect <- function(strURI) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Connect \n"))
   rmongodb <- .jnew("rmongodbtools/RMongoDB", strURI)
+  tryCatch(
+    {
+      strDatabase = unlist(strsplit(strURI, "authSource="))[2]  
+      mongodbtools::mdb.useDatabase(rmongodb, strDatabase)
+    }, 
+  error = function(e) {})
   return(rmongodb)
 }
 
@@ -53,34 +59,6 @@ mdb.showCollections <- function(rmongodb) {
   return(results)
 }
 
-#' @title mdb.find
-#' @export
-mdb.find <- function(rmongodb, strCollection, strQuery, strFile, strDatabase = NULL) {
-  if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
-  multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
-  timer = proc.time()
-  results <- .jcall(rmongodb, "V", "find", strCollection, strQuery, strFile)
-  timer = round(proc.time() - timer)
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
-  invisible(NULL)
-}
-
-#' @title mdb.find
-#' @export
-mdb.findVars <- function(rmongodb, strCollection, strQuery, listVars, strFile, strDatabase = NULL) {
-  if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Find \n",strQuery))
-  multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
-  timer = proc.time()
-  results <- .jcall(rmongodb, "V", "findVars", strCollection, strQuery, as.vector(listVars), strFile)
-  timer = round(proc.time() - timer)
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
-  invisible(NULL)
-}
-
 #' @title mdb.getMaxRows
 #' @export
 mdb.getMaxRows <- function(rmongodb) {
@@ -89,6 +67,7 @@ mdb.getMaxRows <- function(rmongodb) {
 }
 
 #' @title mdb.setMaxRows
+#' @param maxRows Set to -1 to disable maximum rows limitation.
 #' @export
 mdb.setMaxRows <- function(rmongodb, maxRows=-1) {
   .jcall(rmongodb, "V", "setMaxRows", as.integer(maxRows))

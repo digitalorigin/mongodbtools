@@ -1,8 +1,5 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import rmongodbtools.RMongoDB;
 
 public class RMongoDBTest {
@@ -24,15 +21,21 @@ public class RMongoDBTest {
 	         
 	         rmongo.setMaxRows(10);
 	         
-	         String strFile = "C:/workspace/prova_java.csv";
-	         List<String> listAVars = new ArrayList<String>();
-	         listAVars.add("_id");
-	         listAVars.add("contexts.ONLINE_BANKING.OnlineBankingRules.account.sumAmountRule.amount");
-	         String[] listVars = listAVars.toArray(new String[0]);
-	         rmongo.findVars(
+//	         String strFile = "C:/workspace/prova_java.csv";
+//	         List<String> listAVars = new ArrayList<String>();
+//	         listAVars.add("_id");
+//	         listAVars.add("contexts.ONLINE_BANKING.OnlineBankingRules.account.sumAmountRule.amount");
+//	         String[] listVars = listAVars.toArray(new String[0]);
+//	         rmongo.findVars(
+//	        		 "flex_eval", 
+//	        		 "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-07-10T00:00:00.000Z\"} }, \"contexts.ONLINE_BANKING\":{\"$exists\":true}}", 
+//	        		 listVars, 
+//	        		 strFile);
+
+	         String strFile = "C:/workspace/prova_java.json";
+	         rmongo.findJSON(
 	        		 "flex_eval", 
 	        		 "{\"createDate\" : {\"$gte\" :  { \"$date\" : \"2016-07-10T00:00:00.000Z\"} }, \"contexts.ONLINE_BANKING\":{\"$exists\":true}}", 
-	        		 listVars, 
 	        		 strFile);
 	         
 		} catch (Exception e) {
