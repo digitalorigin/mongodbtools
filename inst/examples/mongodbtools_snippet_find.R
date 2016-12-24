@@ -2,9 +2,7 @@ options(java.parameters="-Xmx4g")
 library(mongodbtools)
 digorig::do.init()
 
-strFind = '
-{"contexts.BASKET_MODEL":{"$exists":true}},{"createDate":1,"contexts.BASKET_MODEL":1}
-'
+strFind = '{"createDate" : {"$gte" :  { "$date" : "2016-10-01T00:00:00.000Z"} }, "contexts.BASKET_MODEL":{"$exists":true}}'
 
 mdb = mdb.rmongodb(connData$db_mongodb_pmt_ip, connData$db_mongodb_pmt_port, connData$db_mongodb_pmt_database)
 
