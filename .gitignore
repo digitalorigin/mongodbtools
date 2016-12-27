@@ -9,4 +9,4 @@ src/r-mongo-scala/target
 .Rproj.user
 RMongo.Rproj
 mongodbtools.Rproj
-/data
+/data_output
