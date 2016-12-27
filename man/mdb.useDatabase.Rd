@@ -4,6 +4,6 @@
 \alias{mdb.useDatabase}
 \title{mdb.useDatabase}
 \usage{
-mdb.useDatabase(rmongodb, strDatabase)
+mdb.useDatabase(rmongodb, strDatabase, silent = FALSE)
 }
 

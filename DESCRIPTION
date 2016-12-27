@@ -1,7 +1,7 @@
 Package: mongodbtools
 Type: Package
 Title: MongoDB Client for R
-Version: 1.0.1
+Version: 1.2.0
 Date: 2016-06-29
 Author: Roc Alabern, Sergio Guirado, Tommy Chheng
 Maintainer: Roc Alabern <roc.alabern@gmail.com>

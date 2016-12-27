@@ -7,4 +7,86 @@
 mdb.rmongodb(ip, port, database = NULL, user = connData$IAM_user,
   pass = connData$IAM_pass)
 }
+\arguments{
+\item{ip}{The IP of the MongoDB database to connect to.}
+
+\item{port}{The port of the MongoDB database to connect to.}
+
+\item{user}{The user of the credentials to access the MongoDB database.}
+
+\item{pass}{The password of the credentials to access the MongoDB database.}
+}
+\value{
+A rmongodb object with a connection to the MongoDB specified in params. The object itself contains all basic functionalities needed.
+}
+\description{
+\code{mdb.rmongodb} creates a rmongodb object connecto to a MongoDB database with all basic functionalities needed to work with the database.
+}
+\details{
+This package works well with SSL connections without certificates.
+}
+\section{Usage}{
+
+\preformatted{mdb = mdb.rmongodb(connData$db_mongodb_pmt_ip, connData$db_mongodb_pmt_port, connData$db_mongodb_pmt_database)
+
+mdb = rmongodb$new(ip, port, database, user, pass)
+
+}
+
+\describe{
+\item{\code{mdb$getIp}}{Returns the IP of the connection.}
+\item{\code{mdb$getPort}}{Returns the port of the connection.}
+\item{\code{mdb$getDatabase}}{Returns the databse name of the connection.}
+\item{\code{mdb$getColletion}}{Returns the collection used right now, if any.}
+\item{\code{mdb$setColletion}}{Set the collection to be used in following queries.}
+\item{\code{mdb$getRow}}{Returns the number of rows read by \code{mdb$getNextRaw} or \code{mdb$getNext}}
+\item{\code{mdb$showCollections}}{Show all collections in database.}
+\item{\code{mdb$getMaxRows}}{Returns number of max rows set. This only applies if you use \code{mdb$toCSV} or \code{mdb$toJSON}. Use \code{-1} for no limitation.}
+\item{\code{mdb$setMaxRows}}{Sets number of max rows set. This only applies if you use \code{mdb$toCSV} or \code{mdb$toJSON}. Use \code{-1} for no limitation.}
+\item{\code{mdb$getDateFormat}}{Returns the format to be used to parse date. This only applies if you use \code{mdb$toCSV}.}
+\item{\code{mdb$setDateFormat}}{Sets the format to be used to parse date. This only applies if you use \code{mdb$toCSV}.}
+\item{\code{mdb$find}}{Specifies a find query. This resets the iterator.}
+\item{\code{mdb$projection}}{Specifies a projection query. This resets the iterator.}
+\item{\code{mdb$sort}}{Specifies a sort query. This resets the iterator.}
+\item{\code{mdb$skip}}{Specifies a number of rows to skip. This resets the iterator.}
+\item{\code{mdb$hasNext}}{Returns if the iterator has at least 1 more document.}
+\item{\code{mdb$getNextRaw}}{Returns next document of the iterator. The result is not parsed to an R list.}
+\item{\code{mdb$getNext}}{Returns next document of the iterator. The result is parsed to an R list using \code{jsonlite::fromJSON}.}
+\item{\code{mdb$parseJSON}}{It just calls \code{jsonlite::fromJSON}. It can be used to parse string jsons into R lists.}
+\item{\code{mdb$pathToField}}{Given an array of fields of an R list it will navigate into that path of fields to return the given values.}
+\item{\code{mdb$toCSV}}{Exports an array of vars included in the iterator to a specified CSV file in disk in a very tabular way. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported. It is very similar to \code{mdb.findVarsToCSV} function.}#' 
+\item{\code{mdb$toCSVRaw}}{Exports the iterator to a specified CSV file in disk. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported.}
+\item{\code{mdb$toJSON}}{Exports the iterator to a specified JSON file in disk. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported. It is very similar to \code{mdb.findVarsToJSON} function.}
+\item{\code{mdb$close}}{Closes the database connection.}
+}
+}
+\examples{
+digorig::do.init()
+
+strFind = '{"createDate" : {"$gte" :  { "$date" : "2016-10-01T00:00:00.000Z"} }, "contexts.BASKET_MODEL.score":{"$exists":true}}'
+strProjection = '{
+  "_id":0,
+  "refId":1,
+  "createDate":1,
+  "contexts.BASKET_MODEL.score":1,
+  "contexts.BASKET_MODEL.items_number":1,
+  "contexts.BASKET_MODEL.normalizedItems":1
+}'
+
+mdb = mdb.rmongodb(connData$db_mongodb_pmt_ip, connData$db_mongodb_pmt_port, connData$db_mongodb_pmt_database)
+
+mdb$setColletion("evaluation")
+
+mdb$find(strFind)
+mdb$projection(strProjection)
+
+i = 1
+while (mdb$hasNext() && i <= 10) {
+  json = mdb$getNext()
+  print(json)
+  i = i + 1
+}
+
+mdb$close()
+}
 

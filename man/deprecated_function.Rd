@@ -7,4 +7,5 @@
 mdb.findVars(rmongodb, strCollection, strQuery, listVars, strFile,
   strDatabase = NULL)
 }
+\keyword{internal}
 

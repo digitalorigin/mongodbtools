@@ -34,18 +34,18 @@ mdb.connect <- function(strURI) {
   rmongodb <- .jnew("rmongodbtools/RMongoDB", strURI)
   tryCatch(
     {
-      strDatabase = unlist(strsplit(strURI, "authSource="))[2]  
-      mongodbtools::mdb.useDatabase(rmongodb, strDatabase)
-    }, 
+      strDatabase = unlist(strsplit(strURI, "authSource="))[2]
+      mongodbtools::mdb.useDatabase(rmongodb, strDatabase, silent=TRUE)
+    },
   error = function(e) {})
   return(rmongodb)
 }
 
 #' @title mdb.useDatabase
 #' @export
-mdb.useDatabase <- function(rmongodb, strDatabase) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n USE ",strDatabase," \n"))
+mdb.useDatabase <- function(rmongodb, strDatabase, silent = FALSE) {
+  if (!silent) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (!silent) multiplelines.message(paste0("[Query Input]:\n USE ",strDatabase," \n"))
   results <- .jcall(rmongodb, "V", "connectDatabase", strDatabase)
   invisible(results)
 }
@@ -73,7 +73,6 @@ mdb.setMaxRows <- function(rmongodb, maxRows=-1) {
   .jcall(rmongodb, "V", "setMaxRows", as.integer(maxRows))
   invisible(NULL)
 }
-
 
 #' @title mdb.getDateFormat
 #' @export

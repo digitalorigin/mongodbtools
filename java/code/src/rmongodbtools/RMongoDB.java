@@ -95,79 +95,7 @@ public class RMongoDB {
 		return output;
 	}
 	
-	public void findVarsJSON(String collectionName, String query, String strFile) {
-		try {
-			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
-			
-			Bson bson = ( Bson ) JSON.parse( query );
-			
-			FindIterable<Document> iterable = dbCollection.find(bson);
-			MongoCursor<Document> b = iterable.iterator();
-			
-//			DBCollection dbCollection = db.getCollection(collectionName);
-//			
-//			DBObject queryObject = (DBObject) JSON.parse(query);
-//			DBObject keysObject = (DBObject) JSON.parse(keys);
-//			DBCursor cursor = dbCollection.find(queryObject, keysObject);
-			
-			System.out.println("Exporting to file : "+strFile);
-			File fileOutput = new File(strFile);	
-		    BufferedWriter bufferedWriterOutput = new BufferedWriter(new FileWriter(fileOutput, false));
-
-		    int row = 1;
-		    boolean firstRow = true;
-		    boolean firstColumn;
-		    String strLine;
-		    while (b.hasNext() && (row < maxRows || maxRows <0)) {
-//		    while (cursor.hasNext() && (row < maxRows || maxRows <0)) {
-		    	Document el = b.next();
-//		    	DBObject el = cursor.next();
-		    	
-		    	Set<String> setKeys = el.keySet();
-		    	
-		    	if (firstRow) {
-		    		firstColumn = true;
-		    		strLine = "";
-		    		for (String key : setKeys) {
-			    		if (firstColumn) {
-			    			strLine = strLine + key;
-			    			firstColumn = false;
-			    		} else {
-			    			strLine = strLine + ";" + key;
-			    		}
-			    	}
-		    		bufferedWriterOutput.write(strLine);
-				    bufferedWriterOutput.newLine();
-				    firstRow = false;
-		    	}
-		    	
-		    	firstColumn = true;
-	    		strLine = "";
-	    		for (String key : setKeys) {
-	    			Object o = el.get(key);
-	    			
-//	    			String strValue = o.toString();
-	    			String strValue = String.format("%s",JSON.serialize(o));
-	    			
-		    		if (firstColumn) {
-		    			strLine = strLine + strValue;
-		    			firstColumn = false;
-		    		} else {
-		    			strLine = strLine + ";" + strValue;
-		    		}
-		    	}
-				bufferedWriterOutput.write(strLine);
-				bufferedWriterOutput.newLine();
-				
-				row = row + 1;
-		    }
-		    bufferedWriterOutput.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void findVars(String collectionName, String query, String[] listVars, String strFile) {
+	public void findVarsToCSV(String collectionName, String query, String[] listVars, String strFile) {
 		try {
 			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
 			
@@ -253,7 +181,7 @@ public class RMongoDB {
 		}
 	}
 	
-	public void findJSON(String collectionName, String query, String strFile) {
+	public void findVarsToJSON(String collectionName, String query, String strFile) {
 		try {
 			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
 			
@@ -291,36 +219,84 @@ public class RMongoDB {
 		}
 	}
 	
-	public MongoCursor<Document> find(String collectionName, String query) {
+	public MongoCollection<Document> getCollection(String collectionName) {
 		try {
 			MongoCollection<Document> dbCollection = database.getCollection(collectionName);
-			Bson bson = ( Bson ) JSON.parse( query );
-			FindIterable<Document> iterable = dbCollection.find(bson);
-			MongoCursor<Document> b = iterable.iterator();
-			return b;
+			return dbCollection;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	public boolean hasNext(MongoCursor<Document> b) {
+	public FindIterable<Document> find(MongoCollection<Document> dbCollection, String query) {
 		try {
-			return b.hasNext();
+			Bson bson = ( Bson ) JSON.parse( query );
+			FindIterable<Document> iterable = dbCollection.find(bson);
+			return iterable;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public FindIterable<Document> projection(FindIterable<Document> iterable, String query) {
+		try {
+			Bson bson = ( Bson ) JSON.parse( query );
+			iterable = iterable.projection(bson);
+			return iterable;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public FindIterable<Document> sort(FindIterable<Document> iterable, String query) {
+		try {
+			Bson bson = ( Bson ) JSON.parse( query );
+			iterable = iterable.sort(bson);
+			return iterable;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public FindIterable<Document> skip(FindIterable<Document> iterable, int nSkip) {
+		try {
+			iterable = iterable.skip(nSkip);
+			return iterable;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public MongoCursor<Document> iterator(FindIterable<Document> iterable) {
+		try {
+			MongoCursor<Document> it = iterable.iterator();
+			return it;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public boolean hasNext(MongoCursor<Document> it) {
+		try {
+			return it.hasNext();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 	
-	public String next(MongoCursor<Document> b) {
+	public String next(MongoCursor<Document> it) {
 		try {
 			String strLine = null;
-		    if (b.hasNext()) {
-		    	Document el = b.next();
-		    	
+		    if (it.hasNext()) {
+		    	Document el = it.next();
 		    	strLine = String.format("%s",JSON.serialize(el));
-		    	
 		    }
 		    return strLine;
 		} catch (Exception e) {
@@ -328,6 +304,175 @@ public class RMongoDB {
 			return null;
 		}
 	}	
+	
+	public void toCSV(MongoCursor<Document> it, String[] listVars, String strFile) {
+		try {
+			if (!it.hasNext()) return;
+			
+			List<List<String>> listVarPath = new ArrayList<List<String>>();
+			for (int i=0;i<listVars.length;i++) {
+				String[] temp;
+				temp = listVars[i].split("\\.");
+				listVarPath.add(Arrays.asList(temp)); 
+			}
+			
+			File fileOutput = new File(strFile);	
+		    BufferedWriter bufferedWriterOutput = new BufferedWriter(new FileWriter(fileOutput, false));
+			
+		    int row = 0;
+		    boolean firstColumn;
+		    String strLine;
+			Document el;
+	    	
+			// Headers		
+    		firstColumn = true;
+    		strLine = "";
+			for (int i=0;i<listVars.length;i++) {
+				List<String> listPath = listVarPath.get(i);
+				String key = listPath.get(listPath.size()-1);
+				if (firstColumn) {
+	    			strLine = strLine + key;
+	    			firstColumn = false;
+	    		} else {
+	    			strLine = strLine + ";" + key;
+	    		}
+			}
+    		bufferedWriterOutput.write(strLine);
+		    bufferedWriterOutput.newLine();
+			
+		    while (it.hasNext() && (row < maxRows || maxRows <1)) {
+		    	el = it.next();
+		    	
+		    	firstColumn = true;
+	    		strLine = "";
+				for (int i=0;i<listVars.length;i++) {
+					String val = "";
+					Object obj = null;
+					List<String> listPath = listVarPath.get(i);
+					for (int rec=0;rec<listPath.size();rec++) {
+						String key = listPath.get(rec);
+						if (rec==0) {
+							if (el != null) obj = getByKey(el, key);
+						} else {
+							if (obj != null) obj = getByKey(obj, key);
+						}
+					}
+					if (obj != null) val = getText(obj);
+					if (firstColumn) {
+		    			strLine = strLine + val;
+		    			firstColumn = false;
+		    		} else {
+		    			strLine = strLine + ";" + val;
+		    		}
+				}
+				bufferedWriterOutput.write(strLine);
+				bufferedWriterOutput.newLine();
+				
+				row = row + 1;
+		    }
+		    bufferedWriterOutput.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void toCSV(MongoCursor<Document> it, String strFile) {
+		try {
+			if (!it.hasNext()) return;
+			
+			File fileOutput = new File(strFile);	
+		    BufferedWriter bufferedWriterOutput = new BufferedWriter(new FileWriter(fileOutput, false));
+			
+		    int row = 0;
+		    boolean firstColumn;
+		    String strLine;
+			Document el = it.next();
+			Set<String> setKeys = el.keySet();
+	    	
+			// Headers			
+    		firstColumn = true;
+    		strLine = "";
+    		for (String key : setKeys) {
+	    		if (firstColumn) {
+	    			strLine = strLine + key;
+	    			firstColumn = false;
+	    		} else {
+	    			strLine = strLine + ";" + key;
+	    		}
+	    	}
+    		bufferedWriterOutput.write(strLine);
+		    bufferedWriterOutput.newLine();
+			
+		    // First row
+		    firstColumn = true;
+    		strLine = "";
+    		for (String key : setKeys) {
+    			Object obj = el.get(key);
+				String val = "";
+				
+				if (obj != null) val = getText(obj);
+				if (firstColumn) {
+	    			strLine = strLine + val;
+	    			firstColumn = false;
+	    		} else {
+	    			strLine = strLine + ";" + val;
+	    		}
+			}
+			bufferedWriterOutput.write(strLine);
+			bufferedWriterOutput.newLine();
+			
+			row = row + 1;
+			
+		    while (it.hasNext() && (row < maxRows || maxRows <1)) {
+		    	el = it.next();
+		    	
+		    	firstColumn = true;
+	    		strLine = "";
+	    		for (String key : setKeys) {
+	    			Object obj = el.get(key);
+					String val = "";
+					
+					if (obj != null) val = getText(obj);
+					if (firstColumn) {
+		    			strLine = strLine + val;
+		    			firstColumn = false;
+		    		} else {
+		    			strLine = strLine + ";" + val;
+		    		}
+				}
+				bufferedWriterOutput.write(strLine);
+				bufferedWriterOutput.newLine();
+				
+				row = row + 1;
+		    }
+		    bufferedWriterOutput.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void toJSON(MongoCursor<Document> it, String strFile) throws Exception {
+		if (!it.hasNext()) return;
+		
+		File fileOutput = new File(strFile);	
+	    BufferedWriter bufferedWriterOutput = new BufferedWriter(new FileWriter(fileOutput, false));
+		
+	    int row = 0;
+	    String strLine;
+		Document el;
+		
+	    while (it.hasNext() && (row < maxRows || maxRows <1)) {
+	    	el = it.next();
+	    	
+	    	strLine = String.format("%s",JSON.serialize(el));
+	    	
+			bufferedWriterOutput.write(strLine);
+			bufferedWriterOutput.newLine();
+			
+			row = row + 1;
+	    }
+	    bufferedWriterOutput.close();
+	}
 	
 	public void close() {
 		if (mongoClient != null) mongoClient.close();
@@ -355,16 +500,18 @@ public class RMongoDB {
 	
 	private String getText(Object o) {
 		if (o == null) {
-			return (null);
+			return "";
 		} else if (o instanceof org.bson.types.ObjectId) {
 			org.bson.types.ObjectId obj = (org.bson.types.ObjectId) o;
 			return obj.toString();
 		} else if (o instanceof com.mongodb.BasicDBObject) {
-			com.mongodb.BasicDBObject obj = (com.mongodb.BasicDBObject) o;
-			return obj.toJson();
+//			com.mongodb.BasicDBObject obj = (com.mongodb.BasicDBObject) o;
+//			return obj.toJson();
+			return String.format("%s",JSON.serialize(o));
 		} else if (o instanceof org.bson.Document) {
-			org.bson.Document obj = (org.bson.Document) o;
-			return obj.toJson();
+//			org.bson.Document obj = (org.bson.Document) o;
+//			return obj.toJson();
+			return String.format("%s",JSON.serialize(o));
 		} else if (o instanceof java.lang.Double) {
 			java.lang.Double obj = (java.lang.Double) o;
 			return obj.toString();
@@ -379,7 +526,7 @@ public class RMongoDB {
 			return obj.toString();
 		} else if (o instanceof java.lang.Long) {
 			java.lang.Long obj = (java.lang.Long) o;
-			return obj.toString();			
+			return obj.toString();		
 		} else if (o instanceof java.lang.Boolean) {
 			java.lang.Boolean obj = (java.lang.Boolean) o;
 			return obj.toString();				
@@ -387,8 +534,9 @@ public class RMongoDB {
 			java.util.Date obj = (java.util.Date) o;
 			return this.dateFormat.format(obj);
 		} else {
-			System.out.println("Class not recognized (getText): "+o.getClass().getName());
-			return (o.toString());
+//			System.out.println("Class not recognized (getText): "+o.getClass().getName());
+//			return (o.toString());
+			return String.format("%s",JSON.serialize(o));
 		}
 	}
 	
