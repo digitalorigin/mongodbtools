@@ -24,7 +24,6 @@ mdb.help <- function() {
 #' mdb = rmongodb$new(ip, port, database, user, pass)
 #'
 #' }
-#'
 #' \describe{
 #' \item{\code{mdb$getIp}}{Returns the IP of the connection.}
 #' \item{\code{mdb$getPort}}{Returns the port of the connection.}
@@ -46,7 +45,7 @@ mdb.help <- function() {
 #' \item{\code{mdb$getNext}}{Returns next document of the iterator. The result is parsed to an R list using \code{jsonlite::fromJSON}.}
 #' \item{\code{mdb$parseJSON}}{It just calls \code{jsonlite::fromJSON}. It can be used to parse string jsons into R lists.}
 #' \item{\code{mdb$pathToField}}{Given an array of fields of an R list it will navigate into that path of fields to return the given values.}
-#' \item{\code{mdb$toCSV}}{Exports an array of vars included in the iterator to a specified CSV file in disk in a very tabular way. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported. It is very similar to \code{mdb.findVarsToCSV} function.}#' 
+#' \item{\code{mdb$toCSV}}{Exports an array of vars included in the iterator to a specified CSV file in disk in a very tabular way. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported. It is very similar to \code{mdb.findVarsToCSV} function.} 
 #' \item{\code{mdb$toCSVRaw}}{Exports the iterator to a specified CSV file in disk. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported.}
 #' \item{\code{mdb$toJSON}}{Exports the iterator to a specified JSON file in disk. In case \code{mdb$getMaxRows} is positive then only that number of rows (documents) is exported. It is very similar to \code{mdb.findVarsToJSON} function.}
 #' \item{\code{mdb$close}}{Closes the database connection.}

@@ -6,8 +6,5 @@
 \usage{
 mdb.findVarsToCSV(rmongodb, strCollection, strQuery, listVars, strFile,
   strDatabase = NULL)
-
-mdb.findVarsToCSV(rmongodb, strCollection, strQuery, listVars, strFile,
-  strDatabase = NULL)
 }
 
