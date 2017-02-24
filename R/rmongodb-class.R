@@ -253,6 +253,10 @@ rmongodb <- R6Class("rmongodb",
 
     close = function() {
       mongodbtools::mdb.close(private$java_rmongodb)
+    },
+    
+    finalize = function() {
+      mongodbtools::mdb.close(private$java_rmongodb)
     }
   )
 )
