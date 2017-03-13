@@ -28,10 +28,10 @@ mdb.getURI <- function(
 
 #' @title mdb.connect
 #' @export
-mdb.connect <- function(strURI, silent = FALSE) {
+mdb.connect <- function(strURI, silent = FALSE, java_log = FALSE) {
   if (!silent & use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   if (!silent & use_log) multiplelines.message(paste0("[Query Input]:\n Connect \n"))
-  rmongodb <- .jnew("rmongodbtools/RMongoDB", strURI)
+  rmongodb <- .jnew("rmongodbtools/RMongoDB", strURI, !java_log)
   tryCatch(
     {
       strDatabase = unlist(strsplit(strURI, "authSource="))[2]

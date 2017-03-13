@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -37,9 +39,13 @@ public class RMongoDB {
 	MongoDatabase database = null;
 //	DB db = null;
 	
-	public RMongoDB(String strURI, int maxRows) {
+	public RMongoDB(String strURI, int maxRows, boolean silent) {
 		try {
 			System.out.println("Creating RMongoDB java object...");
+			if (silent) {
+				Logger mongoLogger = Logger.getLogger( "org.mongodb" );
+				mongoLogger.setLevel(Level.WARNING);
+			} 
 			MongoClientOptions.Builder options = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
 			SSLContext context;
 			context = SSLContext.getInstance("SSL");
@@ -56,9 +62,13 @@ public class RMongoDB {
 		}
 	}
 	
-	public RMongoDB(String strURI) {
+	public RMongoDB(String strURI, boolean silent) {
 		try {
 			System.out.println("Creating RMongoDB java object...");
+			if (silent) {
+				Logger mongoLogger = Logger.getLogger( "org.mongodb" );
+				mongoLogger.setLevel(Level.WARNING);
+			} 
 			MongoClientOptions.Builder options = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
 			SSLContext context;
 			context = SSLContext.getInstance("SSL");

@@ -18,7 +18,7 @@ public class RMongoDBTest {
 	static String database = "******";
 	
 	public static void main(String[] args) {
-		RMongoDB rmongo = new RMongoDB("mongodb://"+user+":"+pass+"@"+ip+":"+port+"/?authSource="+database);
+		RMongoDB rmongo = new RMongoDB("mongodb://"+user+":"+pass+"@"+ip+":"+port+"/?authSource="+database, false);
 		try {
 			rmongo.connectDatabase(database);
 			
