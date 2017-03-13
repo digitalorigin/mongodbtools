@@ -6,13 +6,13 @@
 #' @rdname deprecated_function
 mdb.findVars <- function(rmongodb, strCollection, strQuery, listVars, strFile, strDatabase = NULL) {
   if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]: findVarsToCSV \n",strQuery))
-  multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]: findVarsToCSV \n",strQuery))
+  if (use_log) multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
   timer = proc.time()
   results <- .jcall(rmongodb, "V", "findVarsToCSV", strCollection, strQuery, as.vector(listVars), strFile)
   timer = round(proc.time() - timer)
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   invisible(NULL)
 }
 
@@ -20,13 +20,13 @@ mdb.findVars <- function(rmongodb, strCollection, strQuery, listVars, strFile, s
 #' @export
 mdb.findVarsToCSV <- function(rmongodb, strCollection, strQuery, listVars, strFile, strDatabase = NULL) {
   if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]: findVarsToCSV \n",strQuery))
-  multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]: findVarsToCSV \n",strQuery))
+  if (use_log) multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
   timer = proc.time()
   results <- .jcall(rmongodb, "V", "findVarsToCSV", strCollection, strQuery, as.vector(listVars), strFile)
   timer = round(proc.time() - timer)
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   invisible(NULL)
 }
 
@@ -34,12 +34,12 @@ mdb.findVarsToCSV <- function(rmongodb, strCollection, strQuery, listVars, strFi
 #' @export
 mdb.findVarsToJSON <- function(rmongodb, strCollection, strQuery, strFile, strDatabase = NULL) {
   if (!is.null(strDatabase)) mdb.useDatabase(rmongodb, strDatabase)
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]: findVarsToJSON \n",strQuery))
-  multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]: findVarsToJSON \n",strQuery))
+  if (use_log) multiplelines.message(paste0("[Query Output]:\n File: ",strFile," \n"))
   timer = proc.time()
   results <- .jcall(rmongodb, "V", "findVarsToJSON", strCollection, strQuery, strFile)
   timer = round(proc.time() - timer)
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   invisible(NULL)
 }

@@ -28,9 +28,9 @@ mdb.getURI <- function(
 
 #' @title mdb.connect
 #' @export
-mdb.connect <- function(strURI) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Connect \n"))
+mdb.connect <- function(strURI, silent = FALSE) {
+  if (!silent & use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (!silent & use_log) multiplelines.message(paste0("[Query Input]:\n Connect \n"))
   rmongodb <- .jnew("rmongodbtools/RMongoDB", strURI)
   tryCatch(
     {
@@ -44,8 +44,8 @@ mdb.connect <- function(strURI) {
 #' @title mdb.useDatabase
 #' @export
 mdb.useDatabase <- function(rmongodb, strDatabase, silent = FALSE) {
-  if (!silent) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  if (!silent) multiplelines.message(paste0("[Query Input]:\n USE ",strDatabase," \n"))
+  if (!silent & use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (!silent & use_log) multiplelines.message(paste0("[Query Input]:\n USE ",strDatabase," \n"))
   results <- .jcall(rmongodb, "V", "connectDatabase", strDatabase)
   invisible(results)
 }
@@ -53,8 +53,8 @@ mdb.useDatabase <- function(rmongodb, strDatabase, silent = FALSE) {
 #' @title mdb.showCollections
 #' @export
 mdb.showCollections <- function(rmongodb) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Show Collections \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n Show Collections \n"))
   results <- .jcall(rmongodb, "[S", "showCollections")
   return(results)
 }
@@ -91,9 +91,9 @@ mdb.setDateFormat <- function(rmongodb, strDateFormat="yyyy-MM-dd HH:mm:ss") {
 
 #' @title mdb.close
 #' @export
-mdb.close <- function(rmongodb) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
+mdb.close <- function(rmongodb, silent = FALSE) {
+  if (!silent & use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (!silent & use_log) multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
   .jcall(rmongodb, "V", "close")
   invisible(NULL)
 }

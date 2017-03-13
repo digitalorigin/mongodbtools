@@ -5,7 +5,7 @@
 \title{mdb.rmongodb}
 \usage{
 mdb.rmongodb(ip, port, database = NULL, user = connData$IAM_user,
-  pass = connData$IAM_pass)
+  pass = connData$IAM_pass, use_log = TRUE)
 }
 \arguments{
 \item{ip}{The IP of the MongoDB database to connect to.}

@@ -84,9 +84,10 @@ mdb.rmongodb <- function(
   port,
   database = NULL,
   user = connData$IAM_user,
-  pass = connData$IAM_pass
+  pass = connData$IAM_pass,
+  use_log = TRUE
 ) {
-  rmongodb = rmongodb$new(ip, port, database, user, pass)
+  rmongodb = rmongodb$new(ip, port, database, user, pass, use_log)
   return(rmongodb)
 }
 
@@ -104,20 +105,23 @@ rmongodb <- R6Class("rmongodb",
     port = NULL,
     database = NULL,
     collection = NULL,
+    use_log = NULL,
 
     initialize = function(
        ip,
        port,
        database,
        user,
-       pass
+       pass,
+       use_log
     ) {
       self$ip <- ip
       self$port <- port
       self$database <- database
+      self$use_log <- use_log
 
       strURI <- mongodbtools::mdb.getURI(ip, port, database, user, pass)
-      private$java_rmongodb <- mongodbtools::mdb.connect(strURI)
+      private$java_rmongodb <- mongodbtools::mdb.connect(strURI, silent=!use_log)
       if (!is.null(database)) mongodbtools::mdb.useDatabase(private$java_rmongodb, database, silent=TRUE)
     },
 
@@ -147,8 +151,8 @@ rmongodb <- R6Class("rmongodb",
     },
     
     showCollections = function() {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]:\n Show Collections \n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]:\n Show Collections \n"))
       results <- .jcall(private$java_rmongodb, "[S", "showCollections")
       return(results)
     },
@@ -175,8 +179,8 @@ rmongodb <- R6Class("rmongodb",
     },
 
     find = function(query, collection = NULL) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$find \n",query))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$find \n",query))
       if (!is.null(collection)) self$setColletion(collection)
       private$row <- 0
       private$java_iterable <- .jrcall(private$java_rmongodb, "find", private$java_dbCollection, query)
@@ -184,24 +188,24 @@ rmongodb <- R6Class("rmongodb",
     },
 
     projection = function(query) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$projection \n",query))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$projection \n",query))
       private$row <- 0
       private$java_iterable <- .jrcall(private$java_rmongodb, "projection", private$java_iterable, query)
       private$java_it <- .jrcall(private$java_rmongodb, "iterator", private$java_iterable)
     },
 
     sort = function(query) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$sort \n",query))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$sort \n",query))
       private$row <- 0
       private$java_iterable <- .jrcall(private$java_rmongodb, "sort", private$java_iterable, query)
       private$java_it <- .jrcall(private$java_rmongodb, "iterator", private$java_iterable)
     },
 
     skip = function(nSkip) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$skip \n",nSkip))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$skip \n",nSkip))
       private$row <- 0
       private$java_iterable <- .jrcall(private$java_rmongodb, "skip", private$java_iterable, as.integer(nSkip))
       private$java_it <- .jrcall(private$java_rmongodb, "iterator", private$java_iterable)
@@ -234,29 +238,29 @@ rmongodb <- R6Class("rmongodb",
     },
     
     toCSV = function(strFile, listVars) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$toCSV \n",strFile))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$toCSV \n",strFile))
       .jrcall(private$java_rmongodb, "toCSV", private$java_it, as.vector(listVars), strFile)
     },
     
     toCSVRaw = function(strFile) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$toCSVRaw \n",strFile))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$toCSVRaw \n",strFile))
       .jrcall(private$java_rmongodb, "toCSV", private$java_it, strFile)
     },
     
     toJSON = function(strFile) {
-      multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-      multiplelines.message(paste0("[Query Input]: rmongodb$toJSON \n",strFile))
+      if (self$use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+      if (self$use_log) multiplelines.message(paste0("[Query Input]: rmongodb$toJSON \n",strFile))
       .jrcall(private$java_rmongodb, "toJSON", private$java_it, strFile)
     },
 
     close = function() {
-      mongodbtools::mdb.close(private$java_rmongodb)
+      mongodbtools::mdb.close(private$java_rmongodb, silent=!use_log)
     },
     
     finalize = function() {
-      mongodbtools::mdb.close(private$java_rmongodb)
+      mongodbtools::mdb.close(private$java_rmongodb, silent=!use_log)
     }
   )
 )
