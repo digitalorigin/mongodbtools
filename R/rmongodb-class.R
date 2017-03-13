@@ -121,7 +121,7 @@ rmongodb <- R6Class("rmongodb",
       self$use_log <- use_log
 
       strURI <- mongodbtools::mdb.getURI(ip, port, database, user, pass)
-      private$java_rmongodb <- mongodbtools::mdb.connect(strURI, silent=!use_log)
+      private$java_rmongodb <- mongodbtools::mdb.connect(strURI, silent=!self$use_log)
       if (!is.null(database)) mongodbtools::mdb.useDatabase(private$java_rmongodb, database, silent=TRUE)
     },
 
@@ -256,11 +256,11 @@ rmongodb <- R6Class("rmongodb",
     },
 
     close = function() {
-      mongodbtools::mdb.close(private$java_rmongodb, silent=!use_log)
+      mongodbtools::mdb.close(private$java_rmongodb, silent=!self$use_log)
     },
     
     finalize = function() {
-      mongodbtools::mdb.close(private$java_rmongodb, silent=!use_log)
+      mongodbtools::mdb.close(private$java_rmongodb, silent=!self$use_log)
     }
   )
 )
