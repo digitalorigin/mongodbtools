@@ -1,4 +1,7 @@
 # https://jeroen.github.io/mongolite
+# https://cran.r-project.org/web/packages/mongolite/vignettes/intro.html
+# https://github.com/jeroenooms/mongolite
+
 # Init ----
 digorig::do.init()
 library(mongodbtools)

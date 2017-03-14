@@ -1,11 +1,9 @@
+# https://jeroen.github.io/mongolite
 # https://cran.r-project.org/web/packages/mongolite/vignettes/intro.html
 # https://github.com/jeroenooms/mongolite
-# library("mongolite")
-# ?ssl_options
-# ssl_options()
 
+# Example ----
 digorig::do.init()
-
 library("mongolite")
 
 strURIBase <- mongodbtools::mdb.getURI(ip = connData$db_mongodb_pmt_ip, 
@@ -18,8 +16,10 @@ mdb <- mongolite::mongo(collection = "evaluation", db = connData$db_mongodb_pmt_
 
 mdb$count()
 
-
 # Other tests ----
+?ssl_options
+ssl_options()
+
 strURI <- paste0(strURIBase)
 con <- mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, url = strURI, options = ssl_options(weak_cert_validation = TRUE))
 
