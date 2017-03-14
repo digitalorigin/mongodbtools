@@ -4,6 +4,6 @@
 \alias{mdb.close}
 \title{mdb.close}
 \usage{
-mdb.close(rmongodb)
+mdb.close(rmongodb, silent = FALSE)
 }
 

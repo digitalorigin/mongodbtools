@@ -4,6 +4,6 @@
 \alias{mdb.connect}
 \title{mdb.connect}
 \usage{
-mdb.connect(strURI)
+mdb.connect(strURI, silent = FALSE, java_log = FALSE)
 }
 

@@ -4,15 +4,22 @@
 # ?ssl_options
 # ssl_options()
 
-library("mongolite")
 digorig::do.init()
+
+library("mongolite")
 
 strURIBase <- mongodbtools::mdb.getURI(ip = connData$db_mongodb_pmt_ip, 
                      port = connData$db_mongodb_pmt_port, 
                      database = connData$db_mongodb_pmt_database, 
                      user = connData$IAM_user, 
                      pass = connData$IAM_pass)
+strURI <- paste0(strURIBase, "&ssl=true")
+mdb <- mongolite::mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, url = strURI, options = ssl_options(weak_cert_validation = "true"))
 
+mdb$count()
+
+
+# Other tests ----
 strURI <- paste0(strURIBase)
 con <- mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, url = strURI, options = ssl_options(weak_cert_validation = TRUE))
 
@@ -21,6 +28,10 @@ con <- mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, u
 
 strURI <- paste0(strURIBase, "&ssl=true")
 con <- mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, url = strURI)
+
+strURI <- paste0(strURIBase, "&ssl=true&sslWeakCertificateValidation=true")
+con <- mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, url = strURI, options = ssl_options(weak_cert_validation = "true"))
+
 
 strURI <- paste0(strURIBase, "&sslWeakCertificateValidation=true")
 con <- mongo(collection = "evaluation", db = connData$db_mongodb_pmt_database, url = strURI)

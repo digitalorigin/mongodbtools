@@ -10,7 +10,7 @@ import com.mongodb.client.MongoCollection;
 
 import rmongodbtools.RMongoDB;
 
-public class RMongoDBTest {
+public class RMongoDBTest01 {
 	static String user = "******";
 	static String pass = "******";
 	static String ip = "******";
