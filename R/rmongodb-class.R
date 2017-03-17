@@ -220,15 +220,15 @@ rmongodb <- R6Class("rmongodb",
       return(.jrcall(private$java_rmongodb, "next", private$java_it))
     },
     
-    getNext = function() {
+    getNext = function(...) {
       private$row <- private$row + 1
       # str_json <- .jrcall(private$java_rmongodb, "next", private$java_it)
       # list_json = jsonlite::fromJSON(str_json)
-      return(jsonlite::fromJSON(.jrcall(private$java_rmongodb, "next", private$java_it)))
+      return(jsonlite::fromJSON(.jrcall(private$java_rmongodb, "next", private$java_it), ...))
     },
     
-    parseJSON = function(json) {
-      return(jsonlite::fromJSON(json))
+    parseJSON = function(json, ...) {
+      return(jsonlite::fromJSON(json, ...))
     },
     
     pathToField = function(list_json, path) {

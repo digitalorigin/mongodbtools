@@ -6,4 +6,3 @@
 \usage{
 mdb.setDateFormat(rmongodb, strDateFormat = "yyyy-MM-dd HH:mm:ss")
 }
-

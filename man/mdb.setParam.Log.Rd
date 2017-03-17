@@ -6,4 +6,3 @@
 \usage{
 mdb.setParam.Log(bool)
 }
-

@@ -7,4 +7,3 @@
 mdb.findVarsToJSON(rmongodb, strCollection, strQuery, strFile,
   strDatabase = NULL)
 }
-

@@ -239,6 +239,18 @@ public class RMongoDB {
 		}
 	}
 	
+//	public FindIterable<Document> count(MongoCollection<Document> dbCollection, String query) {
+//		try {
+//			dbCollection.count();
+//			Bson bson = ( Bson ) JSON.parse( query );
+//			FindIterable<Document> iterable = dbCollection.find(bson);
+//			return iterable;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
+	
 	public FindIterable<Document> find(MongoCollection<Document> dbCollection, String query) {
 		try {
 			Bson bson = ( Bson ) JSON.parse( query );

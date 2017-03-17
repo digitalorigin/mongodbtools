@@ -6,4 +6,3 @@
 \usage{
 mdb.getMaxRows(rmongodb)
 }
-

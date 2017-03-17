@@ -59,6 +59,7 @@ mdb = rmongodb$new(ip, port, database, user, pass)
 \item{\code{mdb$close}}{Closes the database connection.}
 }
 }
+
 \examples{
 digorig::do.init()
 
@@ -88,4 +89,3 @@ while (mdb$hasNext() && i <= 10) {
 
 mdb$close()
 }
-

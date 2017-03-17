@@ -7,4 +7,3 @@
 mdb.getURI(ip, port, database = NULL, user = connData$IAM_user,
   pass = connData$IAM_pass)
 }
-

@@ -6,4 +6,3 @@
 \usage{
 mdb.useDatabase(rmongodb, strDatabase, silent = FALSE)
 }
-

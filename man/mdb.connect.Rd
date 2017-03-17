@@ -6,4 +6,3 @@
 \usage{
 mdb.connect(strURI, silent = FALSE, java_log = FALSE)
 }
-

@@ -37,6 +37,7 @@ public class RMongoDBTest02 {
 	         java_iterable = rmongo.find(java_dbCollection, str_find);
 	         
 //	         java_dbCollection.count(json);
+//	         java_dbCollection.findOne(json);
 //	         java_iterable.skip();
 //	         java_iterable.limit();
 //	         java_dbCollection.aggregate(list_json);

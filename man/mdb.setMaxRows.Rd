@@ -9,4 +9,3 @@ mdb.setMaxRows(rmongodb, maxRows = -1)
 \arguments{
 \item{maxRows}{Set to -1 to disable maximum rows limitation.}
 }
-

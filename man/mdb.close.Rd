@@ -6,4 +6,3 @@
 \usage{
 mdb.close(rmongodb, silent = FALSE)
 }
-

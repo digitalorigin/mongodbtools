@@ -7,4 +7,3 @@
 mdb.findVarsToCSV(rmongodb, strCollection, strQuery, listVars, strFile,
   strDatabase = NULL)
 }
-

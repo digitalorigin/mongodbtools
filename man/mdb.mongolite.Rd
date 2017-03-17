@@ -8,4 +8,3 @@ mdb.mongolite(ip, port, database, collection, user = connData$IAM_user,
   pass = connData$IAM_pass, use_ssl = TRUE,
   use_weak_cert_validation = TRUE)
 }
-
