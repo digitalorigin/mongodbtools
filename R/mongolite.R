@@ -21,7 +21,7 @@ mdb.mongolite <- function(
     user = user, 
     pass = pass)
   if (use_ssl) strURI <- paste0(strURI, "&ssl=true")
-  if (use_weak_cert_validation) mdb <- mongolite::mongo(collection = collection, db = database, url = strURI, options = ssl_options(weak_cert_validation = "true"))
+  if (use_weak_cert_validation) mdb <- mongolite::mongo(collection = collection, db = database, url = strURI, options = mongolite::ssl_options(weak_cert_validation = "true"))
   else mdb <- mongolite::mongo(collection = collection, db = database, url = strURI)
   return(mdb)
 }
