@@ -83,11 +83,12 @@ mdb.rmongodb <- function(
   ip,
   port,
   database = NULL,
+  replicaSet = NULL,
   user = connData$IAM_user,
   pass = connData$IAM_pass,
   use_log = TRUE
 ) {
-  rmongodb = rmongodb$new(ip, port, database, user, pass, use_log)
+  rmongodb = rmongodb$new(ip, port, database, replicaSet, user, pass, use_log)
   return(rmongodb)
 }
 
@@ -111,6 +112,7 @@ rmongodb <- R6Class("rmongodb",
        ip,
        port,
        database,
+       replicaSet,
        user,
        pass,
        use_log
@@ -120,7 +122,12 @@ rmongodb <- R6Class("rmongodb",
       self$database <- database
       self$use_log <- use_log
 
-      strURI <- mongodbtools::mdb.getURI(ip, port, database, user, pass)
+      if (!is.null(replicaSet)) {
+        strURI <- mongodbtools::mdb.getURIShard(ip, port, database, replicaSet, user, pass)
+        message(strURI)
+      } else {
+        strURI <- mongodbtools::mdb.getURI(ip, port, database, user, pass)
+      }
       private$java_rmongodb <- mongodbtools::mdb.connect(strURI, silent=!self$use_log)
       if (!is.null(database)) mongodbtools::mdb.useDatabase(private$java_rmongodb, database, silent=TRUE)
     },

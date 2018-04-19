@@ -8,6 +8,26 @@ multiplelines.message <- function (strText) {
   invisible(NULL)
 }
 
+#' @title mdb.getURIShard
+#' @export
+mdb.getURIShard <- function(
+  ip,
+  port,
+  database,
+  replicaSet,
+  user = connData$IAM_user,
+  pass = connData$IAM_pass
+) {
+  base = "mongodb://"
+  strURI = paste0(
+    base,
+    user,":",pass, "@",
+    paste0(ip, ":", port, collapse=",")
+  )
+  strURI = paste0(strURI, "/", database, "?ssl=true&streamType=netty&replicaSet=", replicaSet,"&authSource=admin")
+  invisible(strURI)
+}
+
 #' @title mdb.getURI
 #' @export
 mdb.getURI <- function(
